@@ -3,124 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css"> 
+    <link rel="stylesheet" href="editor.css">
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <title>HTML WYSIWYG Editor - AuxZen</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
-
-        #toolbar {
-            background-color: #f0f0f0;
-            padding: 10px;
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            flex-wrap: wrap; /* Allow wrapping on smaller screens */
-            gap: 5px; /* Space between buttons */
-            align-items: center;
-        }
-
-        #toolbar button, #toolbar select {
-            padding: 5px 10px;
-            border: 1px solid #ccc;
-            background-color: white;
-            cursor: pointer;
-            border-radius: 4px;
-            font-size: 14px;  /* Consistent font size */
-        }
-
-        #toolbar button:hover, #toolbar select:hover {
-            background-color: #eee;
-        }
-        
-        #toolbar .separator {
-            width: 1px;
-            height: 20px;
-            background-color: #ccc;
-            margin: 0 10px;
-        }
-
-
-        #editor-container {
-            display: flex;
-            flex: 1;  /* Take up remaining vertical space */
-        }
-
-        #editor {
-            flex: 1; /* 50% width */
-            padding: 20px;
-            border: 1px solid #ccc;
-            overflow-y: auto; /* Enable vertical scrolling */
-            outline: none; /* Remove default outline on focus */
-            min-height: 200px; /* Ensure some minimum height */
-
-        }
-
-        #code-view {
-            flex: 1; /* 50% width */
-            padding: 20px;
-            border: 1px solid #ccc;
-            background-color: #f8f8f8;
-            overflow: auto;  /* Enable scrolling */
-            font-family: monospace;
-            white-space: pre-wrap; /* Preserve whitespace and line breaks */
-        }
-
-        #preview-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;  /* Ensure it's on top */
-            justify-content: center; /* Center content horizontally */
-            align-items: center;  /* Center content vertically */
-
-        }
-
-        #preview-iframe {
-            width: 90%;
-            height: 90%;
-            border: none;
-            background-color: white;
-        }
-
-        #preview-close {
-          position: absolute;
-          top: 20px;
-          right: 30px;
-          font-size: 30px;
-          cursor: pointer;
-          color: white;
-          background: none;
-          border: none;
-
-        }
-
-        #add-elements {
-          padding: 10px;
-          border: 1px solid #ccc;
-          margin-bottom: 10px;
-        }
-         /* Style for smaller screens (responsive) */
-        @media (max-width: 768px) {
-            #editor-container {
-                flex-direction: column; /* Stack editor and code view */
-            }
-             #toolbar {
-                justify-content: space-around; /* Distribute buttons evenly */
-            }
-        }
-
-    </style>
 </head>
 <body>
 
@@ -155,7 +41,6 @@
         <button onclick="showPreview()">Preview</button>
     </div>
 
-
     <div id="editor-container">
         <div id="editor" contenteditable="true">
             <p>Start typing here...</p>
@@ -167,26 +52,23 @@
       <button id="preview-close" onclick="closePreview()">×</button>
         <iframe id="preview-iframe"></iframe>
     </div>
+
     <script>
-        const editor = document.getElementById('editor');
+               const editor = document.getElementById('editor');
         const codeView = document.getElementById('code-view');
         const previewIframe = document.getElementById('preview-iframe');
         const previewModal = document.getElementById('preview-modal');
 
-        // Update code view whenever the editor content changes
         editor.addEventListener('input', updateCodeView);
-        editor.addEventListener('keyup', updateCodeView); // For things like backspace
-        editor.addEventListener('paste', updateCodeView);  // Handle pasted content
-        editor.addEventListener('mouseup', updateCodeView); // Catch changes from context menu (right-click)
+        editor.addEventListener('keyup', updateCodeView);
+        editor.addEventListener('paste', updateCodeView);
+        editor.addEventListener('mouseup', updateCodeView);
 
        function updateCodeView() {
            let html = editor.innerHTML;
-           // Basic HTML escaping (important for security and correct display)
           html = html.replace(/&/g, "&").replace(/</g, "<").replace(/>/g, ">");
 
-          //  Optionally prettify the HTML (add indentation, newlines)
-          //  For a robust solution, consider a library like 'js-beautify'
-           html = prettyPrintHTML(html);  // Use our custom pretty printer.
+           html = prettyPrintHTML(html);
            codeView.textContent = html;
        }
 
@@ -194,7 +76,7 @@
        function prettyPrintHTML(html) {
             let indent = 0;
             let prettyHTML = '';
-            const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']; // Add more as needed
+            const voidElements = ['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr'];
 
             html = html.replace(/<\/?([a-z0-9-]+)([^>]*)>/gi, (match, tagName, attributes) => {
                 tagName = tagName.toLowerCase();
@@ -206,7 +88,7 @@
                 if (isClosingTag) {
                     indent--;
                 }
-               if (!isVoidElement && !isClosingTag) {  // Only add newline before non-void opening tags
+               if (!isVoidElement && !isClosingTag) {
                     formattedTag += '\n' + '  '.repeat(indent);
                 }
                 else if(isClosingTag)
@@ -225,8 +107,6 @@
                 return formattedTag;
             });
 
-
-          // Add a final newline (optional)
           prettyHTML = html.trim() + '\n';
           return prettyHTML;
 
@@ -236,8 +116,8 @@
 
         function formatDoc(command, value = null) {
             document.execCommand(command, false, value);
-            updateCodeView(); // Update the code view after formatting
-            editor.focus(); // Put focus back in the editor
+            updateCodeView();
+            editor.focus();
         }
 
 
@@ -258,7 +138,6 @@
 
        function showPreview() {
             const htmlContent = editor.innerHTML;
-            // Create a full HTML document for the iframe.  This is crucial!
             const previewDocument = `
                 <!DOCTYPE html>
                 <html>
@@ -274,23 +153,19 @@
                 </body>
                 </html>`;
 
-           previewIframe.srcdoc = previewDocument;  // Use srcdoc for security and simplicity.
-           previewModal.style.display = 'flex'; // Show the modal
+           previewIframe.srcdoc = previewDocument;
+           previewModal.style.display = 'flex';
 
        }
 
         function closePreview() {
             previewModal.style.display = 'none';
-            previewIframe.srcdoc = ''; // Clear the iframe content
+            previewIframe.srcdoc = '';
         }
 
 
 
-        // Initial update
         updateCodeView();
-
-
     </script>
-
 </body>
 </html>
