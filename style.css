@@ -1,3 +1,4 @@
+
 body {
   background-color: purple;
   font-family: sans-serif;
@@ -26,7 +27,7 @@ div {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.toolbar {
+#toolbar {
   display: flex;
   flex-direction: column;
   gap: 10px;
