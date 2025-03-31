@@ -198,9 +198,10 @@
             currentTrack++;
             playNextTrack();
           }
-        if (currentTrack = 7) {
-            let currentTrack = 1;
-        });
+        else if (currentTrack > 6) {// I'm tired
+      currentTrack = 1;
+      playNextTrack();
+    });
 
           audio.play();
         }
