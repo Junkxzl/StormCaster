@@ -197,9 +197,7 @@
           audio.addEventListener('ended', () => {
             currentTrack++;
             playNextTrack();
-          } if (currentTrack > 6) {
-             currentTrack = 1;            
-          } );
+          });
 
           audio.play();
         }
