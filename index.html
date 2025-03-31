@@ -197,7 +197,10 @@
           audio.addEventListener('ended', () => {
             currentTrack++;
             playNextTrack();
-          });
+          }
+        if (currentTrack = 7) {
+            let currentTrack = 1
+        });
 
           audio.play();
         }
@@ -242,7 +245,6 @@
     });
 
     overlay.addEventListener('click', () => {
-      // No longer close modal on overlay click
     });
 
     // --- Drag Functionality ---
