@@ -197,11 +197,9 @@
           audio.addEventListener('ended', () => {
             currentTrack++;
             playNextTrack();
-          }
-        else if (currentTrack > 6) {// I'm tired
-      currentTrack = 1;
-      playNextTrack();
-    });
+          } if (currentTrack > 6) {
+             currentTrack = 1;            
+          } );
 
           audio.play();
         }
