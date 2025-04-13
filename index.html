@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="styles.css">
-  <title>XZL</title>
+  <title>Stormcaster</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <style>
     #launchButton {
@@ -121,22 +121,24 @@
 
   <div class="container">
     <nav class="links">
-      <h1>Welcome to XZL - modded</h1>
+      <h1>Welcome to the Stormcaster official website</h1>
       <button id="launchButton">Continue</button>
       <p id="loadingMessage">Loading...</p>
     </nav>
     <div id="websiteContent">
-      <h1>JunkXZL - modded</h1>
-      <p>Major update! Wait for original update! - Azbith H.</p>
+      <h1>JunkXZL</h1>
+      <p>Major update is here! - Azbith H.</p>
 
       <nav class="links">
-        <h1>links:</h1><br>
-        <p>JunkXZL's Minecraft realms:</p>
+        <p>Here is the current version of the modded:</p>
+        <a href="https://UwU9990.github.io/StormCaster-updates/" class="button-link" data-modal="originalLinkModal">Modded</a>
+        <h1>Actual links:</h1><br>
+        <a href="#" class="button-link" data-modal="YouTubeModal">YouTube</a>
+        <a href="#" class="button-link" data-modal="BandLabsModal">BandLabs</a>
+        <p>Minecraft realm:</p>
         <a href="./realms.html" class="button-link" data-modal="realmsModal">Realms</a>
-        <p>JunkXZL's current Discord server:</p>
+        <p>Discord server:</p>
         <a href="#" class="button-link" data-modal="discordModal">Discord</a>
-        <p>Twitch</p>
-        <a href="#" class="button-link" data-modal="twitchModal">Twitch</a>
       </nav>
     </div>
   </div>
@@ -144,10 +146,28 @@
   <div id="realmsModal" class="modal">
     <span class="closeButton">×</span>
     <iframe src="./realms.html"></iframe>
+    <a href="./embeds.html">Embed not working?</a>
   </div>
-</div id="twitchModal" class="modal">
-   <span class="closeButton">×</span>
-   <iframe src="https://www.twitch.tv/junkxzl"></iframe>
+
+  <div id="BandLabsModal" class="modal">
+    <span class="closeButton">×</span>
+    <iframe src="https://www.bandlab.com/junkxzl"></iframe>
+    <a href="./embeds.html">Embed not working?</a>
+  </div>
+
+  <div id="YouTubeModal" class="modal">
+    <span class="closeButton">×</span>
+    <iframe src="https://www.youtube.com/@Junkxzl"></iframe>
+    <a href="./embeds.html">Embed not working?</a>
+  </div>
+
+  <div id="originalLinkModal" class="modal">
+    <span class="closeButton">×</span>
+    <div style="text-align: center; padding: 20px;">
+      <a href="https://UwU9990.github.io/StormCaster-updates/" class="button-link" target="_blank">Click to see (So you don't have to hear the music twice).</a>
+    </div>
+  </div>
+
   <div id="discordModal" class="modal">
     <span class="closeButton">×</span>
     <div style="text-align: center; padding: 20px;">
