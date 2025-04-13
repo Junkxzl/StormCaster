@@ -6,19 +6,257 @@
   <link rel="stylesheet" href="styles.css">
   <title>XZL</title>
   <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <style>
+    #launchButton {
+      padding: 15px 30px;
+      font-size: 18px;
+      background-color: #28a745; /* Green */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 20px;
+    }
+
+    #launchButton:hover {
+      background-color: #218838;
+    }
+
+    #websiteContent {
+      display: none; /* Initially hidden */
+    }
+
+    #loadingMessage {
+      display: none;
+      margin-top: 20px;
+      font-style: italic;
+      color: white; /* Keep the loading message white */
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8); /* Transparent black background */
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+      width: 80%;
+      max-width: 800px;
+      cursor: grab;
+      min-width: 500px;
+      min-height: 400px;
+    }
+
+    .modal.dragging {
+      cursor: grabbing;
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      border-radius: 5px;
+      pointer-events: auto; /* Allow clicks inside iframe */
+    }
+
+    .modal .closeButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 20px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: transparent; /* No background for overlay */
+      z-index: 999;
+      pointer-events: none; /* Make overlay click-through */
+    }
+
+    #overlay.active {
+      pointer-events: auto; /* Enable overlay only when a modal is open */
+    }
+
+    /* Discord Modal Styles */
+    #discordModal {
+        color: white; /* Default text color for the modal */
+    }
+
+    #discordModal a.button-link {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #663399; /* Example Discord button color */
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+        border: 2px solid white;
+    }
+
+    #discordModal a.button-link:hover {
+        background-color: #9933cc; /* Example Discord button hover color */
+        border: 2px solid red;
+        color: red;
+    }
+
+    #discordModal a.button-link:visited {
+        color: white;
+    }
+  </style>
 </head>
 <body>
-  <div class="container">
-    <h1>JunkXZL</h1>
-    <p>Welcome to my website where I test stuff and mess around!</p>
 
+  <div class="container">
     <nav class="links">
-      <button class="button-link" onclick="window.open('https://soundcloud.com/junkxzl','_blank')">SoundCloud</button>
-      <button class="button-link" onclick="window.open('https://www.youtube.com/@Junkxzl','_blank')">YouTube</button>
-      <button class="button-link" onclick="window.open('https://www.bandlab.com/junkxzl','_blank')">BandLab</button>
-      <button class="button-link" onclick="window.open('https://open.spotify.com/artist/2ouW8S1rUebmuJPv4QskvQ','_blank')">Spotify</button>
+      <h1>Welcome to XZL - modded</h1>
+      <button id="launchButton">Continue</button>
+      <p id="loadingMessage">Loading...</p>
     </nav>
-    <footer>Style made by Puro335.</footer>
+    <div id="websiteContent">
+      <h1>JunkXZL - modded</h1>
+      <p>Major update! Wait for original update! - Azbith H.</p>
+
+      <nav class="links">
+        <h1>links:</h1><br>
+        <p>JunkXZL's Minecraft realms:</p>
+        <a href="./realms.html" class="button-link" data-modal="realmsModal">Realms</a>
+        <p>JunkXZL's current Discord server:</p>
+        <a href="#" class="button-link" data-modal="discordModal">Discord</a>
+        <p>Twitch</p>
+        <a href="#" class="button-link" data-modal="twitchModal">Twitch</a>
+      </nav>
+    </div>
   </div>
+
+  <div id="realmsModal" class="modal">
+    <span class="closeButton">×</span>
+    <iframe src="./realms.html"></iframe>
+  </div>
+</div id="twitchModal" class="modal">
+   <span class="closeButton">×</span>
+   <iframe src="https://www.twitch.tv/junkxzl"></iframe>
+  <div id="discordModal" class="modal">
+    <span class="closeButton">×</span>
+    <div style="text-align: center; padding: 20px;">
+      <a href="https://discord.gg/y5F4TXBy3Y" class="button-link" target="_blank">Join the Discord!</a>
+    </div>
+  </div>
+
+  <div id="overlay"></div>
+
+  <audio id="chime" src="chime.wav" preload="auto"></audio>
+
+  <script>
+    const launchButton = document.getElementById('launchButton');
+    const websiteContent = document.getElementById('websiteContent');
+    const chime = document.getElementById('chime');
+    const loadingMessage = document.getElementById('loadingMessage');
+    const modalLinks = document.querySelectorAll('[data-modal]'); // Select all modal links
+    const modals = document.querySelectorAll('.modal');
+    const closeButtons = document.querySelectorAll('.closeButton');
+    const overlay = document.getElementById('overlay');
+
+    let currentTrack = 1;
+
+    function playMusic() {
+      function playNextTrack() {
+        if (currentTrack <= 6) {
+          const audio = new Audio(`music${currentTrack}.mp3`);
+          audio.volume = 0.5;
+
+          audio.addEventListener('ended', () => {
+            currentTrack++;
+            playNextTrack();
+          });
+
+          audio.play();
+        }
+      }
+      playNextTrack();
+    }
+
+    launchButton.addEventListener('click', () => {
+      loadingMessage.style.display = "block";
+      launchButton.style.display = 'none';
+
+      setTimeout(() => {
+        websiteContent.style.display = 'block';
+        loadingMessage.style.display = "none";
+        chime.play();
+        playMusic();
+      }, 2000);
+
+    });
+
+    // --- Modal Functionality ---
+    modalLinks.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const modalId = link.dataset.modal;
+        const modal = document.getElementById(modalId);
+
+        modal.style.display = 'block';
+        overlay.classList.add('active');
+      });
+    });
+
+    closeButtons.forEach(button => {
+      button.addEventListener('click', (event) => {
+        const modal = event.target.closest('.modal');
+        modal.style.display = 'none';
+          const anyModalOpen = Array.from(modals).some(m => m.style.display === 'block'); //check to see if any modals are open, if no, then make overlay not work and not show
+          if(!anyModalOpen){
+              overlay.classList.remove('active');
+          }
+      });
+    });
+
+    overlay.addEventListener('click', () => {
+    });
+
+    // --- Drag Functionality ---
+    let isDragging = false;
+    let offsetX, offsetY;
+    let currentModal = null; // Track currently dragged modal
+
+    modals.forEach(modal => {
+      modal.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        currentModal = modal; // Set current modal
+        modal.classList.add('dragging');
+        offsetX = e.clientX - modal.offsetLeft;
+        offsetY = e.clientY - modal.offsetTop;
+      });
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      if (currentModal) {
+        currentModal.classList.remove('dragging');
+        currentModal = null; // Reset current modal
+      }
+    });
+
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging || !currentModal) return;
+      currentModal.style.left = (e.clientX - offsetX) + 'px';
+      currentModal.style.top = (e.clientY - offsetY) + 'px';
+    });
+
+  </script>
+
 </body>
 </html>
